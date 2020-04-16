@@ -1,7 +1,24 @@
 var htmlInterface = require('./htmlInterface');
 const axios = require('axios');
 
-onPageLoad();
+module.exports = {
+    onPageLoad: function () {
+        populateToken();
+        populateOrganziation();
+        console.log("Token"+document.getElementById("form-token").value);
+        onInputChangeSync();
+    },
+    
+    onTokenChange: function () {
+        persistToken();
+        onInputChangeSync()
+    },
+    
+    onOrganizationChange: function (){
+        persistOrganization();
+        onInputChangeSync();
+    }
+};
 
 function readToken() {
     return document.getElementById("form-token").value;
@@ -30,15 +47,7 @@ function persistOrganization() {
     }
 }
 
-function onTokenChange() {
-    persistToken();
-    //
-}
 
-function onOrganizationChange(){
-    persistOrganization();
-    //
-}
 
 function populateToken() {
       let token = localStorage.getItem("token");
