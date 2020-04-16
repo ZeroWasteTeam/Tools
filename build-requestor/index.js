@@ -10,13 +10,28 @@ async function process(){
     let branches = await getBranchNames();
     htmlInterface.setBranchNames(branches);
 
-    console.log("done");
-    
+
+    let commitIds = await getCommitIds();
+
+    htmlInterface.setCommitIds(commitIds);
 }
 
-console.log(htmlInterface.getBranch());
+process().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
 
-process().then(x => console.log("Went well")).catch(x => console.log(x.message));
+async function getCommitIds() {
+    let organizationName = htmlInterface.getOrganization();
+    let repoName = htmlInterface.getRepository();
+    let branchName = htmlInterface.getBranch();
+    try {
+        let res = await axios.get(`https://api.github.com/repos/${organizationName}/${repoName}/commits?sha=${branchName}`, getConfig());
+        return res.data.map(x => x.sha);
+    }
+    catch (e) {
+        if (e.response.status == 404)
+            throw new Error("The repoName is not found");
+        throw new Error("There may be a problem with the repoName");
+    }
+}
 
 async function getBranchNames() {
     let organizationName = htmlInterface.getOrganization();
@@ -26,7 +41,6 @@ async function getBranchNames() {
         branches = res.data.map(x => x.name);
     }
     catch (e) {
-        console.log(e);
         if (e.response.status == 404)
             throw new Error("The repoName is not found");
         throw new Error("There may be a problem with the repoName");
@@ -41,7 +55,6 @@ async function getRepositoryNames() {
         return res.data.map(x => x.full_name).map(x => x.replace(`${organizationName}/`,''));
     }
     catch (e) {
-        console.log(e);
         if (e.response.status == 404)
             throw new Error("The organization is not found");
         throw new Error("There may be a problem with the organization");

@@ -3,23 +3,23 @@ var htmlInterface = {
         return 'e14267c2a56d4adf4e27a7e403e05303a30b976e';
     },
 
-    getOrganization:function (warning) { 
+    getOrganization:function () { 
         return 'ZeroWasteTeam';
     },
 
-    getRepository:function (error) { 
+    getRepository:function () { 
         return 'SampleJavaMavenPackage';
     },
 
-    getBranch:function (error) { 
-        return 'branch';
+    getBranch:function () { 
+        return 'release-1234';
     },
 
-    getSha:function (error) { 
+    getSha:function () { 
         return 'sha';
     },
 
-    setError:function (error) {
+    setError:function () {
         console.log(error);
     },
 
@@ -29,6 +29,10 @@ var htmlInterface = {
 
     setBranchNames: function(branches) {
         console.log(branches);
+    },
+
+    setCommitIds: function(commitIds) {
+        console.log(commitIds);
     }
     
 
