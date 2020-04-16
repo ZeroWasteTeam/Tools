@@ -102,20 +102,13 @@
           font-weight: normal;
       }
   </style>
+  
 </head>
 
 <body onload="onPageLoad()">
-
-
-
   <h1 style="color: #5e9ca0;">Build Requestor&nbsp;</h1>
   <p>This tool is used to trigger build in GitHub actions.&nbsp;</p>
-
-
-
-
   <h2 style="color: #2e6c80;">Input for triggering build: </h2>
-
   <div class="form-style-3">
       <form>
           <fieldset>
@@ -145,65 +138,5 @@
       </div>
   </div>
   <script src="main.js"></script>
-  <script>
-  
-      function readToken() {
-          return document.getElementById("form-token").value;
-      }
-
-      function readOrganization() {
-          return document.getElementById("form-organization").value;
-      }
-
-      function persistToken() {
-          var token = readToken();
-          let localStorageToken = localStorage.getItem("token");
-          if (token == null) token = "";
-          if (localStorageToken != token)
-              localStorage.setItem("token", token);
-      }
-
-      function persistOrganization() {
-          var organization = readOrganization();
-          console.log("organization is "+organization);
-          let localStorageOrganization = localStorage.getItem("organization");
-          if (organization == null) organization = "";
-          if (localStorageOrganization != organization){
-              localStorage.setItem("organization", organization);
-              console.log("LocalStorage org"+localStorage.getItem("organization"));
-          }
-      }
-
-      function onTokenChange() {
-          persistToken();
-          //
-      }
-
-      function onOrganizationChange(){
-          persistOrganization();
-          //
-      }
-
-      function populateToken() {
-            let token = localStorage.getItem("token");
-            if(token != null){
-                document.getElementById('form-token').value = token;
-            }
-        }
-
-        function populateOrganziation() {
-            let organziation = localStorage.getItem("organization");
-            if(organziation != null){
-                document.getElementById('form-organization').value = organziation;
-            }
-        }
-
-
-        function onPageLoad() {
-            populateToken();
-            populateOrganziation();
-        }
-
-  </script>
 </body>
 </html>

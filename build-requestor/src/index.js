@@ -1,8 +1,68 @@
 var htmlInterface = require('./htmlInterface');
 const axios = require('axios');
 
+onPageLoad();
 
-onInputChangeSync();
+function readToken() {
+    return document.getElementById("form-token").value;
+}
+
+function readOrganization() {
+    return document.getElementById("form-organization").value;
+}
+
+function persistToken() {
+    var token = readToken();
+    let localStorageToken = localStorage.getItem("token");
+    if (token == null) token = "";
+    if (localStorageToken != token)
+        localStorage.setItem("token", token);
+}
+
+function persistOrganization() {
+    var organization = readOrganization();
+    console.log("organization is "+organization);
+    let localStorageOrganization = localStorage.getItem("organization");
+    if (organization == null) organization = "";
+    if (localStorageOrganization != organization){
+        localStorage.setItem("organization", organization);
+        console.log("LocalStorage org"+localStorage.getItem("organization"));
+    }
+}
+
+function onTokenChange() {
+    persistToken();
+    //
+}
+
+function onOrganizationChange(){
+    persistOrganization();
+    //
+}
+
+function populateToken() {
+      let token = localStorage.getItem("token");
+      if(token != null){
+          document.getElementById('form-token').value = token;
+      }
+  }
+
+  function populateOrganziation() {
+      let organziation = localStorage.getItem("organization");
+      if(organziation != null){
+          document.getElementById('form-organization').value = organziation;
+      }
+  }
+
+
+  function onPageLoad() {
+      populateToken();
+      populateOrganziation();
+      console.log("Token"+document.getElementById("form-token").value);
+      onInputChangeSync();
+  }
+
+
 
 function onInputChangeSync() {
     onInputChange().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));

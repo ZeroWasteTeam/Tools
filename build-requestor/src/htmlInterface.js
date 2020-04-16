@@ -1,6 +1,9 @@
 var htmlInterface = {
     getToken: function () { 
-        return document.getElementById("form-token").value;
+        var token = document.getElementById("form-token").value;
+        console.log(document.getElementById("form-token"));
+        console.log("Token is "+token);
+        return token;
     },
 
     getOrganization:function () { 
