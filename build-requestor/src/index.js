@@ -5,7 +5,7 @@ module.exports = {
     onPageLoad: function () {
         populateToken();
         populateOrganziation();
-        console.log("Token"+document.getElementById("form-token").value);
+        console.log("Tokena"+document.getElementById("form-token").value);
         onInputChangeSync();
     },
     
