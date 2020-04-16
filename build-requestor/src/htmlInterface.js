@@ -1,17 +1,14 @@
 var htmlInterface = {
     getToken: function () { 
-        var token = document.getElementById("form-token").value;
-        console.log(document.getElementById("form-token"));
-        console.log("Token is "+token);
-        return token;
+        return document.getElementById("form-token").value;
     },
 
     getOrganization:function () { 
-        return 'ZeroWasteTeam';
+        return document.getElementById("form-organization").value;
     },
 
     getRepository:function () { 
-        return 'SampleJavaMavenPackage';
+        return document.getElementById("form-repository").value;
     },
 
     getBranch:function () { 
