@@ -8,7 +8,7 @@ var htmlInterface = {
     },
 
     getRepository:function (error) { 
-        return 'test';
+        return 'SampleJavaMavenPackage';
     },
 
     getBranch:function (error) { 
@@ -21,6 +21,14 @@ var htmlInterface = {
 
     setError:function (error) {
         console.log(error);
+    },
+
+    setRepositoryNames: function(repositories) {
+        console.log(repositories);
+    },
+
+    setBranchNames: function(branches) {
+        console.log(branches);
     }
     
 
