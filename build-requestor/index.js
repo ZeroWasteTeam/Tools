@@ -1,7 +1,14 @@
 var htmlInterface = require('./htmlInterface');
 const axios = require('axios');
 
-async function process(){
+
+onInputChangeSync();
+
+function onInputChangeSync() {
+    onInputChange().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
+}
+
+async function onInputChange(){
     await valiateToken();
     
     let repositoryNames = await getRepositoryNames();
@@ -15,8 +22,6 @@ async function process(){
 
     htmlInterface.setCommitIds(commitIds);
 }
-
-process().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
 
 async function getCommitIds() {
     let organizationName = htmlInterface.getOrganization();
@@ -72,7 +77,6 @@ function getConfig() {
 }
 
 async function valiateToken() {
-    console.log(getConfig());
     try {
         let res = await axios.get("https://api.github.com/user",  getConfig());
     }

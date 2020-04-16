@@ -1,6 +1,6 @@
 var htmlInterface = {
     getToken: function () { 
-        return '78e26e0fec3199740896159e819ac50271b10479';
+        return '6b6bd877bc80d72c071bb36c9d6da56146d9ba32';
     },
 
     getOrganization:function () { 

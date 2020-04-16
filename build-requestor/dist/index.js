@@ -859,7 +859,14 @@ exports.enable(load());
 var htmlInterface = __webpack_require__(401);
 const axios = __webpack_require__(53);
 
-async function process(){
+
+onInputChangeSync();
+
+function onInputChangeSync() {
+    onInputChange().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
+}
+
+async function onInputChange(){
     await valiateToken();
     
     let repositoryNames = await getRepositoryNames();
@@ -873,8 +880,6 @@ async function process(){
 
     htmlInterface.setCommitIds(commitIds);
 }
-
-process().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
 
 async function getCommitIds() {
     let organizationName = htmlInterface.getOrganization();
@@ -930,7 +935,6 @@ function getConfig() {
 }
 
 async function valiateToken() {
-    var token = htmlInterface.getToken();
     try {
         let res = await axios.get("https://api.github.com/user",  getConfig());
     }
@@ -1481,7 +1485,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 var htmlInterface = {
     getToken: function () { 
-        return 'e14267c2a56d4adf4e27a7e403e05303a30b976e';
+        return '6b6bd877bc80d72c071bb36c9d6da56146d9ba32';
     },
 
     getOrganization:function () { 
@@ -1500,7 +1504,7 @@ var htmlInterface = {
         return 'sha';
     },
 
-    setError:function () {
+    setError:function (error) {
         console.log(error);
     },
 
