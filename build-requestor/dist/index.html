@@ -1,9 +1,209 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Getting Started</title>
-  </head>
-  <body>
-    <script src="main.js"></script>
-  </body>
+<head>
+
+  <style type="text/css">
+      .form-style-3 {
+          max-width: 450px;
+          font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+      }
+
+      .form-style-3 label {
+          display: block;
+          margin-bottom: 10px;
+      }
+
+      .form-style-3 label>span {
+          float: left;
+          width: 100px;
+          color: #F072A9;
+          font-weight: bold;
+          font-size: 13px;
+          text-shadow: 1px 1px 1px #fff;
+      }
+
+      .form-style-3 fieldset {
+          border-radius: 10px;
+          -webkit-border-radius: 10px;
+          -moz-border-radius: 10px;
+          margin: 0px 0px 10px 0px;
+          border: 1px solid #FFD2D2;
+          padding: 20px;
+          background: #FFF4F4;
+          box-shadow: inset 0px 0px 15px #FFE5E5;
+          -moz-box-shadow: inset 0px 0px 15px #FFE5E5;
+          -webkit-box-shadow: inset 0px 0px 15px #FFE5E5;
+      }
+
+      .form-style-3 fieldset legend {
+          color: #FFA0C9;
+          border-top: 1px solid #FFD2D2;
+          border-left: 1px solid #FFD2D2;
+          border-right: 1px solid #FFD2D2;
+          border-radius: 5px 5px 0px 0px;
+          -webkit-border-radius: 5px 5px 0px 0px;
+          -moz-border-radius: 5px 5px 0px 0px;
+          background: #FFF4F4;
+          padding: 0px 8px 3px 8px;
+          box-shadow: -0px -1px 2px #F1F1F1;
+          -moz-box-shadow: -0px -1px 2px #F1F1F1;
+          -webkit-box-shadow: -0px -1px 2px #F1F1F1;
+          font-weight: normal;
+          font-size: 12px;
+      }
+
+      .form-style-3 textarea {
+          width: 250px;
+          height: 100px;
+      }
+
+      .form-style-3 input[type=text],
+      .form-style-3 input[type=date],
+      .form-style-3 input[type=datetime],
+      .form-style-3 input[type=number],
+      .form-style-3 input[type=search],
+      .form-style-3 input[type=time],
+      .form-style-3 input[type=url],
+      .form-style-3 input[type=email],
+      .form-style-3 select,
+      .form-style-3 textarea {
+          border-radius: 3px;
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          border: 1px solid #FFC2DC;
+          outline: none;
+          color: #F072A9;
+          padding: 5px 8px 5px 8px;
+          box-shadow: inset 1px 1px 4px #FFD5E7;
+          -moz-box-shadow: inset 1px 1px 4px #FFD5E7;
+          -webkit-box-shadow: inset 1px 1px 4px #FFD5E7;
+          background: #FFEFF6;
+          width: 50%;
+      }
+
+      .form-style-3 input[type=submit],
+      .form-style-3 input[type=button] {
+          background: #EB3B88;
+          border: 1px solid #C94A81;
+          padding: 5px 15px 5px 15px;
+          color: #FFCBE2;
+          box-shadow: inset -1px -1px 3px #FF62A7;
+          -moz-box-shadow: inset -1px -1px 3px #FF62A7;
+          -webkit-box-shadow: inset -1px -1px 3px #FF62A7;
+          border-radius: 3px;
+          border-radius: 3px;
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          font-weight: bold;
+      }
+
+      .required {
+          color: red;
+          font-weight: normal;
+      }
+  </style>
+</head>
+
+<body onload="onPageLoad()">
+
+
+
+  <h1 style="color: #5e9ca0;">Build Requestor&nbsp;</h1>
+  <p>This tool is used to trigger build in GitHub actions.&nbsp;</p>
+
+
+
+
+  <h2 style="color: #2e6c80;">Input for triggering build: </h2>
+
+  <div class="form-style-3">
+      <form>
+          <fieldset>
+              <legend>Build Trigger Inputs:</legend>
+              <label for="field1">
+                  <span>Token <span class="required">*</span></span>
+                  <input id="form-token" type="text" class="input-field" name="field1" value=""
+                      onchange="onTokenChange()" />
+              </label>
+              <label for="field2">
+                  <span>Organization <span class="required">*</span></span>
+                  <input id="form-organization" type="text" class="input-field" name="field2" value="" onchange="onOrganizationChange()" /></label>
+              <label for="field3"><span>Repository <span class="required">*</span></span><input type="text"
+                      class="input-field" name="field3" value="" /></label>
+              <label for="field4"><span>Branch</span><select name="field4" class="select-field">
+                      <option value="Appointment">Appointment</option>
+                      <option value="Interview">Interview</option>
+                      <option value="Regarding a post">Regarding a post</option>
+                  </select></label>
+              <label for="field4"><span>Git Sha </span><select name="field4" class="select-field"></select></label>
+              <label><span> </span><input type="button" value="Submit" onclick="onSubmit()" /></label>
+          </fieldset>
+      </form>
+
+      <div>
+          <p id="error" style="color:red;">This tool is used to trigger build in GitHub actions.&nbsp;</p>
+      </div>
+  </div>
+  <script src="main.js"></script>
+  <script>
+  
+      function readToken() {
+          return document.getElementById("form-token").value;
+      }
+
+      function readOrganization() {
+          return document.getElementById("form-organization").value;
+      }
+
+      function persistToken() {
+          var token = readToken();
+          let localStorageToken = localStorage.getItem("token");
+          if (token == null) token = "";
+          if (localStorageToken != token)
+              localStorage.setItem("token", token);
+      }
+
+      function persistOrganization() {
+          var organization = readOrganization();
+          console.log("organization is "+organization);
+          let localStorageOrganization = localStorage.getItem("organization");
+          if (organization == null) organization = "";
+          if (localStorageOrganization != organization){
+              localStorage.setItem("organization", organization);
+              console.log("LocalStorage org"+localStorage.getItem("organization"));
+          }
+      }
+
+      function onTokenChange() {
+          persistToken();
+          //
+      }
+
+      function onOrganizationChange(){
+          persistOrganization();
+          //
+      }
+
+      function populateToken() {
+            let token = localStorage.getItem("token");
+            if(token != null){
+                document.getElementById('form-token').value = token;
+            }
+        }
+
+        function populateOrganziation() {
+            let organziation = localStorage.getItem("organization");
+            if(organziation != null){
+                document.getElementById('form-organization').value = organziation;
+            }
+        }
+
+
+        function onPageLoad() {
+            populateToken();
+            populateOrganziation();
+        }
+
+  </script>
+</body>
 </html>
