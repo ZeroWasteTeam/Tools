@@ -72,7 +72,7 @@ function getConfig() {
 }
 
 async function valiateToken() {
-    var token = htmlInterface.getToken();
+    console.log(getConfig());
     try {
         let res = await axios.get("https://api.github.com/user",  getConfig());
     }

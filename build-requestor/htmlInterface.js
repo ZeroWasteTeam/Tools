@@ -1,6 +1,6 @@
 var htmlInterface = {
     getToken: function () { 
-        return 'e14267c2a56d4adf4e27a7e403e05303a30b976e';
+        return '78e26e0fec3199740896159e819ac50271b10479';
     },
 
     getOrganization:function () { 
@@ -19,7 +19,7 @@ var htmlInterface = {
         return 'sha';
     },
 
-    setError:function () {
+    setError:function (error) {
         console.log(error);
     },
 
