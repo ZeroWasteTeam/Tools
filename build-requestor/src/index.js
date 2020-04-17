@@ -38,13 +38,7 @@ module.exports = {
 
     onRepositoryChange: function () {
         console.log("Repository has been changed");
-        //Clear Error   
-        //Validate Token
-        //Validate Organization
-        //Validate Repository
-        //Clear Branch
-        //Clear Sha
-        setBranchNames()
+        onRepoChangeAsync()
             .then(x => console.log("Repository Change completed successfully"))
             .catch(x => {
                 console.log("Repository Change completed with errors: " + x.message);
@@ -66,6 +60,21 @@ async function onBasicInputChangeAsync(){
     //Enable UI
 }
 
+async function onRepoChangeAsync(){
+    //Disable UI
+    //Disable button
+    await clear(repo = false, branch = true, commitId = true);
+    let h = htmlInterface;
+    await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository());
+
+    console.log("The repository name is :"+htmlInterface.getRepository());
+    let branchNames = await getBranchNames();
+    console.log(branchNames);
+    htmlInterface.setBranchNames(branchNames);
+    //Trigger onChangeRepo
+    //Enable UI
+}
+
 
 function persistToken() {
     var token = htmlInterface.getToken();
@@ -77,13 +86,10 @@ function persistToken() {
 
 function persistOrganization() {
     var organization = htmlInterface.getOrganization();
-    console.log("organization is " + organization);
     let localStorageOrganization = localStorage.getItem("organization");
     if (organization == null) organization = "";
-    if (localStorageOrganization != organization) {
+    if (localStorageOrganization != organization)
         localStorage.setItem("organization", organization);
-        console.log("LocalStorage org" + localStorage.getItem("organization"));
-    }
 }
 
 function populateToken() {
@@ -100,7 +106,7 @@ function populateOrganziation() {
     }
 }
 
-async function clear(repo, branch, commitId){
+async function clear(repo = false, branch = false, commitId = false){
     htmlInterface.setError("");
     console.log(`clear parameters repo:${repo} branch:${branch} commitId:${commitId}`);
     if(repo == true) htmlInterface.setRepositoryNames([]);
@@ -225,7 +231,6 @@ async function getCommitIds() {
 async function getBranchNames() {
     let organizationName = htmlInterface.getOrganization();
     let repoName = htmlInterface.getRepository();
-    console.log("THe repo name is#" + repoName);
     try {
         let res = await axios.get(`https://api.github.com/repos/${organizationName}/${repoName}/branches`, getConfig());
         return res.data.map(x => x.name);
