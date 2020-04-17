@@ -123,11 +123,8 @@
                   <input id="form-organization" type="text" class="input-field" name="field2" value="" onchange="EntryPoint.onOrganizationChange()" /></label>
               <label for="field3">
                     <span>Repository <span class="required">*</span></span>
-                    <input id="form-repository" type="text" class="input-field" name="field3" value="" /></label>
-              <label for="field4"><span>Branch</span><select name="field4" class="select-field">
-                      <option value="Appointment">Appointment</option>
-                      <option value="Interview">Interview</option>
-                      <option value="Regarding a post">Regarding a post</option>
+                    <input id="form-repository" type="text" class="input-field" name="field3" value="" onchange="EntryPoint.onInputChangeSyncInterface()"/></label>
+              <label for="field4"><span>Branch</span><select id="form-branch" name="field4" class="select-field">
                   </select></label>
               <label for="field4"><span>Git Sha </span><select name="field4" class="select-field"></select></label>
               <label><span> </span><input type="button" value="Submit" onclick="onSubmit()" /></label>

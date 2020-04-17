@@ -17,6 +17,10 @@ module.exports = {
     onOrganizationChange: function (){
         persistOrganization();
         onInputChangeSync();
+    },
+
+    onInputChangeSyncInterface: function(){
+        onInputChangeSync();
     }
 };
 
@@ -110,6 +114,7 @@ async function getCommitIds() {
 async function getBranchNames() {
     let organizationName = htmlInterface.getOrganization();
     let repoName = htmlInterface.getRepository();
+    console.log("THe repo name is#"+repoName);
     try {
         let res = await axios.get(`https://api.github.com/repos/${organizationName}/${repoName}/branches`, getConfig());
         branches = res.data.map(x => x.name);

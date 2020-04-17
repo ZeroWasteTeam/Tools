@@ -8,6 +8,9 @@ var htmlInterface = {
     },
 
     getRepository:function () { 
+        console.log("element ->"+document.getElementById("form-repository"));
+        console.log(document.getElementById("form-repository"));
+        console.log("element value ->"+document.getElementById("form-repository").value);
         return document.getElementById("form-repository").value;
     },
 
@@ -28,15 +31,21 @@ var htmlInterface = {
     },
 
     setBranchNames: function(branches) {
+        var x = document.getElementById("form-branch");
+        
+
+        branches.forEach(element => {
+            var option = document.createElement("option");
+            option.text = "Kiwi";
+            x.add(option, x[0]);
+        });
         console.log(branches);
     },
 
     setCommitIds: function(commitIds) {
         console.log(commitIds);
     }
-    
-
-
 };
+
 
 module.exports = htmlInterface
