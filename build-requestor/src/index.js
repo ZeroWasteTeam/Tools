@@ -73,15 +73,28 @@ module.exports = {
     },
 
     onSubmit: function() {
-        onSubmitAsync().then(console.log("Submitted successfully")).catch(x =>{
-            console.log("There is an error in submitting: "+x.message);
-            htmlInterface.setError(x.message);
-        });
+        onSubmitAsync()
+            .then(console.log("Submitted successfully"))
+            .catch(x =>{
+                console.log("There is an error in submitting: "+x.message);
+                htmlInterface.setError(x.message);
+            });
     }
 };
 
 async function onSubmitAsync(){
-    throw new Error("Simulation");
+    try {
+
+        let payload = `{ "event_type": "rebuild", "client_payload":{ "buildBranch" : "${htmlInterface.getBranch()}", "buildSha":"${htmlInterface.getCommitId()}" }}`;
+        let res = await axios.post(`https://api.github.com/repos/${htmlInterface.getOrganization()}/${htmlInterface.getRepository()}/dispatches`, payload, getHeaders(htmlInterface.getToken()));
+        console.log("success");
+    } catch (e) {
+        console.log("exception "+e);
+        console.log(e);
+        //if (e.response.status == 404) throw new Error("The branch is invalid. (It could be that the organization/repo is invalid)");
+        //if (e.response.status == 401) throw new Error("The token is not authorized");
+        //throw new Error("There may be a problem with the token or organization or repo or branch");
+    }
 } 
 
 function disableButton(){
