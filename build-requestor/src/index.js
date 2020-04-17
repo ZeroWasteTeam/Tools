@@ -77,6 +77,7 @@ async function onRepoChangeAsync(){
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository());
     let branchNames = await getBranchNames();
+    if(branchNames.length == 0) throw new Error('This repository does not contain any branches');
     htmlInterface.setBranchNames(branchNames);
     await onBranchChangeAsync();
     //Enable UI
@@ -201,37 +202,6 @@ async function assertTokenIsValid(token) {
     }
 }
 
-async function setRepositoryNames() {
-    assertBasicInputsAreNotEmpty();
-    await valiateToken();
-
-    let repositoryNames = await getRepositoryNames();
-    htmlInterface.setRepositoryNames(repositoryNames);
-
-    /*s
-    
-
-    let commitIds = await getCommitIds();
-    htmlInterface.setCommitIds(commitIds);
-    */
-}
-
-async function setBranchNames() {
-    //Validation needed
-
-    let branches = await getBranchNames();
-    htmlInterface.setBranchNames(branches);
-}
-
-function assertBasicInputsAreNotEmpty() {
-    let token = htmlInterface.getToken();
-    if ((token == null) || (token == ""))
-        throw new Error("The token is empty");
-    let organization = htmlInterface.getOrganization();
-    if ((organization == null) || (organization == ""))
-        throw new Error("The organization is empty");
-}
-
 async function getCommitIds() {
     let organizationName = htmlInterface.getOrganization();
     let repoName = htmlInterface.getRepository();
@@ -289,15 +259,3 @@ function getHeaders(token) {
         }
     };
 }
-
-async function valiateToken() {
-    try {
-        let res = await axios.get("https://api.github.com/user", getConfig());
-    } catch (e) {
-        if (e.response.status == 401)
-            throw new Error("The token is incorrect");
-        throw new Error("There may be a problem with the token");
-    }
-}
-
-
