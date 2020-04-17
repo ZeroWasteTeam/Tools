@@ -34,9 +34,9 @@ var htmlInterface = {
         var x = document.getElementById("form-branch");
         
 
-        branches.forEach(element => {
+        branches.forEach(branch => {
             var option = document.createElement("option");
-            option.text = "Kiwi";
+            option.text = branch;
             x.add(option, x[0]);
         });
         console.log(branches);
