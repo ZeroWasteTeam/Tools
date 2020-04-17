@@ -17,6 +17,13 @@ module.exports = {
     onTokenChange: function () {
         console.log("Token has been changed");
         persistToken();
+        //Clear Error
+        //Validate Token
+        //Validate Organization
+        //Clear Repository
+        //Clear Branch
+        //Clear Sha
+        
         setRepositoryNames()
             .then(x => console.log("Token Change completed successfully"))
             .catch(x => {
@@ -26,8 +33,18 @@ module.exports = {
     },
 
     onOrganizationChange: function () {
+        
         console.log("Organization has been changed");
         persistOrganization();
+
+        //Clear Error   
+        //Validate Token
+        //Validate Organization
+        //Clear Repository
+        //Clear Branch
+        //Clear Sha
+
+        
         setRepositoryNames()
             .then(x => console.log("Organziation Change completed successfully"))
             .catch(x => {
@@ -39,6 +56,12 @@ module.exports = {
     onRepositoryChange: function () {
         console.log("Repository has been changed");
 
+        //Clear Error   
+        //Validate Token
+        //Validate Organization
+        //Validate Repository
+        //Clear Branch
+        //Clear Sha
         setBranchNames()
             .then(x => console.log("Repository Change completed successfully"))
             .catch(x => {
@@ -47,9 +70,6 @@ module.exports = {
             });
     },
 
-    onInputChangeSyncInterface: function () {
-        setRepositoryNames();
-    }
 };
 
 function persistToken() {
