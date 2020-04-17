@@ -46,6 +46,16 @@ module.exports = {
             });
     },
 
+    onBranchChange: function() {
+        console.log("Branch has been changed");
+        onBranchChangeAsync()
+            .then(x => console.log("Branch Change completed successfully"))
+            .catch(x => {
+                console.log("Branch Change completed with errors: " + x.message);
+                htmlInterface.setError(x.message);
+            });
+    }
+
 };
 
 async function onBasicInputChangeAsync(){
@@ -66,11 +76,20 @@ async function onRepoChangeAsync(){
     await clear(repo = false, branch = true, commitId = true);
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository());
-
-    console.log("The repository name is :"+htmlInterface.getRepository());
     let branchNames = await getBranchNames();
-    console.log(branchNames);
     htmlInterface.setBranchNames(branchNames);
+    await onBranchChangeAsync();
+    //Enable UI
+}
+
+async function onBranchChangeAsync(){
+    //Disable UI
+    //Disable button
+    await clear(repo = false, branch = false, commitId = true);
+    let h = htmlInterface;
+    await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository(), h.getBranch());
+    let commitIds = await getCommitIds();
+    htmlInterface.setCommitIds(commitIds);
     //Trigger onChangeRepo
     //Enable UI
 }
@@ -115,7 +134,6 @@ async function clear(repo = false, branch = false, commitId = false){
 }
 
 async function assertInputsAreCorrect(token = null, organization = null, repo = null, branch = null, commitId = null) {
-    
     await assertTokenIsValid(token);
 
     if(organization == null) return;
