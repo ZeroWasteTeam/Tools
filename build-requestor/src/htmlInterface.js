@@ -32,7 +32,7 @@ var htmlInterface = {
     },
 
     setCommitIds: function(commitIds) {
-        setSelectOptions("form-commitId", branches);
+        setSelectOptions("form-commitId", commitIds);
     }
 };
 

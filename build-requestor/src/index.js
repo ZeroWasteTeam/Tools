@@ -103,9 +103,9 @@ function populateOrganziation() {
 async function clear(repo, branch, commitId){
     htmlInterface.setError("");
     console.log(`clear parameters repo:${repo} branch:${branch} commitId:${commitId}`);
-    if(repo == true) htmlInterface.setRepositoryNames(["one"]);
-    if(branch == true) htmlInterface.setBranchNames(["one"]);
-    if(commitId == true) htmlInterface.setCommitIds(["one"]);
+    if(repo == true) htmlInterface.setRepositoryNames([]);
+    if(branch == true) htmlInterface.setBranchNames([]);
+    if(commitId == true) htmlInterface.setCommitIds([]);
 }
 
 async function assertInputsAreCorrect(token = null, organization = null, repo = null, branch = null, commitId = null) {
@@ -228,13 +228,12 @@ async function getBranchNames() {
     console.log("THe repo name is#" + repoName);
     try {
         let res = await axios.get(`https://api.github.com/repos/${organizationName}/${repoName}/branches`, getConfig());
-        branches = res.data.map(x => x.name);
+        return res.data.map(x => x.name);
     } catch (e) {
         if (e.response.status == 404)
             throw new Error("The repoName is not found");
         throw new Error("There may be a problem with the repoName");
     }
-    return branches;
 }
 
 async function getRepositoryNames() {
