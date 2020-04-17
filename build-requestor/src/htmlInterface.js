@@ -7,29 +7,23 @@ var htmlInterface = {
         return document.getElementById("form-organization").value;
     },
 
-    getRepository:function () { 
-        console.log("element ->"+document.getElementById("form-repository"));
-        console.log(document.getElementById("form-repository"));
-        console.log("element value ->"+document.getElementById("form-repository").value);
+    getRepository:function () {
         return document.getElementById("form-repository").value;
     },
 
     getBranch:function () { 
-        var x = document.getElementById("form-branch");
-        console.log("The selected branch is "+x.value);
-        return x.value;
+        return document.getElementById("form-branch").value;
     },
 
     getSha:function () { 
-        return 'sha';
+        return document.getElementById("form-commitId").value;
     },
 
     setError:function (error) {
         document.getElementById("error").innerHTML = error;
     },
 
-    setRepositoryNames: function(repositories) {
-        console.log(repositories);
+    setRepositoryNames: function(repositories) {    
         setSelectOptions("form-repository", repositories);
     },
 
@@ -38,7 +32,7 @@ var htmlInterface = {
     },
 
     setCommitIds: function(commitIds) {
-        console.log(commitIds);
+        setSelectOptions("form-commitId", branches);
     }
 };
 
@@ -51,6 +45,9 @@ function setSelectOptions(id, names) {
     for (i = length - 1; i >= 0; i--) {
         x.options[i] = null;
     }
+    console.log("cleared :"+id);
+    console.log("setting :"+id);
+    console.log(names);
     names.forEach(name => {
         var option = document.createElement("option");
         option.text = name;

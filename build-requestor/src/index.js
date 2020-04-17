@@ -6,7 +6,7 @@ module.exports = {
         console.log("Page loaded started");
         populateToken();
         populateOrganziation();
-        setRepositoryNames()
+        onBasicInputChangeAsync()
             .then(x => console.log("Page Load Completd Successfully"))
             .catch(x => {
                 htmlInterface.setError(x.message);
@@ -16,7 +16,8 @@ module.exports = {
 
     onTokenChange: function () {
         console.log("Token has been changed");
-        onTokenChangeAsync()
+        persistToken();
+        onBasicInputChangeAsync()
             .then(x => console.log("Token Change completed successfully"))
             .catch(x => {
                 htmlInterface.setError(x.message);
@@ -25,19 +26,9 @@ module.exports = {
     },
 
     onOrganizationChange: function () {
-        
         console.log("Organization has been changed");
         persistOrganization();
-
-        //Clear Error   
-        //Validate Token
-        //Validate Organization
-        //Clear Repository
-        //Clear Branch
-        //Clear Sha
-
-        
-        setRepositoryNames()
+        onBasicInputChangeAsync()
             .then(x => console.log("Organziation Change completed successfully"))
             .catch(x => {
                 console.log("Organziation Change completed with errors: " + x.message);
@@ -47,7 +38,6 @@ module.exports = {
 
     onRepositoryChange: function () {
         console.log("Repository has been changed");
-
         //Clear Error   
         //Validate Token
         //Validate Organization
@@ -64,11 +54,10 @@ module.exports = {
 
 };
 
-async function onTokenChangeAsync(){
-    persistToken();
+async function onBasicInputChangeAsync(){
     //Disable UI
     //Disable button
-    await clear({repo : true, branch: true, commitId: true});
+    await clear(repo = true, branch = true, commitId = true);
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization());
     let repositoryNames = await getRepositoryNames();
@@ -76,6 +65,7 @@ async function onTokenChangeAsync(){
     //Trigger onChangeRepo
     //Enable UI
 }
+
 
 function persistToken() {
     var token = htmlInterface.getToken();
@@ -110,11 +100,12 @@ function populateOrganziation() {
     }
 }
 
-async function clear(repo = true, branch = true, commitId = true){
+async function clear(repo, branch, commitId){
     htmlInterface.setError("");
-    if(repo == true) htmlInterface.setRepositoryNames([]);
-    if(branch == true) htmlInterface.setBranchNames([]);
-    if(commitId == true) htmlInterface.setCommitIds([]);
+    console.log(`clear parameters repo:${repo} branch:${branch} commitId:${commitId}`);
+    if(repo == true) htmlInterface.setRepositoryNames(["one"]);
+    if(branch == true) htmlInterface.setBranchNames(["one"]);
+    if(commitId == true) htmlInterface.setCommitIds(["one"]);
 }
 
 async function assertInputsAreCorrect(token = null, organization = null, repo = null, branch = null, commitId = null) {
