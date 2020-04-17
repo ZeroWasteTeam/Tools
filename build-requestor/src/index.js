@@ -56,7 +56,7 @@ async function onBasicInputChangeAsync(){
     await assertInputsAreCorrect(h.getToken(), h.getOrganization());
     let repositoryNames = await getRepositoryNames();
     htmlInterface.setRepositoryNames(repositoryNames);
-    //Trigger onChangeRepo
+    await onRepoChangeAsync();
     //Enable UI
 }
 
