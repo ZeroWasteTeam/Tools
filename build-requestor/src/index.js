@@ -70,8 +70,19 @@ module.exports = {
                 console.log("CommitId Change completed with errors: " + x.message);
                 htmlInterface.setError(x.message);
             });
+    },
+
+    onSubmit: function() {
+        onSubmitAsync().then(console.log("Submitted successfully")).catch(x =>{
+            console.log("There is an error in submitting: "+x.message);
+            htmlInterface.setError(x.message);
+        });
     }
 };
+
+async function onSubmitAsync(){
+    throw new Error("Simulation");
+} 
 
 function disableButton(){
     document.getElementById("submit").disabled = true;
