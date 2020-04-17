@@ -16,15 +16,7 @@ module.exports = {
 
     onTokenChange: function () {
         console.log("Token has been changed");
-        persistToken();
-        //Clear Error
-        //Validate Token
-        //Validate Organization
-        //Clear Repository
-        //Clear Branch
-        //Clear Sha
-        
-        setRepositoryNames()
+        onTokenChangeAsync()
             .then(x => console.log("Token Change completed successfully"))
             .catch(x => {
                 htmlInterface.setError(x.message);
@@ -72,6 +64,19 @@ module.exports = {
 
 };
 
+async function onTokenChangeAsync(){
+    persistToken();
+    //Disable UI
+    //Disable button
+    await clear({repo : true, branch: true, commitId: true});
+    let h = htmlInterface;
+    await assertInputsAreCorrect(h.getToken(), h.getOrganization());
+    let repositoryNames = await getRepositoryNames();
+    htmlInterface.setRepositoryNames(repositoryNames);
+    //Trigger onChangeRepo
+    //Enable UI
+}
+
 function persistToken() {
     var token = htmlInterface.getToken();
     let localStorageToken = localStorage.getItem("token");
@@ -102,6 +107,82 @@ function populateOrganziation() {
     let organziation = localStorage.getItem("organization");
     if (organziation != null) {
         document.getElementById('form-organization').value = organziation;
+    }
+}
+
+async function clear(repo = true, branch = true, commitId = true){
+    htmlInterface.setError("");
+    if(repo == true) htmlInterface.setRepositoryNames([]);
+    if(branch == true) htmlInterface.setBranchNames([]);
+    if(commitId == true) htmlInterface.setCommitIds([]);
+}
+
+async function assertInputsAreCorrect(token = null, organization = null, repo = null, branch = null, commitId = null) {
+    
+    await assertTokenIsValid(token);
+
+    if(organization == null) return;
+    await assertOrganizationIsValid(token, organization);
+
+    if(repo == null) return;
+    await assertRepoIsValid(token, organization, repo);
+
+    if(branch == null) return;
+    await assertBranchIsValid(token, organization, repo, branch);
+    
+    if(commitId == null) return;
+    await assertCommitIdIsValid(token, organization, repo, branch, commitId);
+
+}
+
+async function assertCommitIdIsValid(token, organization, repo, branch, commitId) {
+    //At this point, we would like to assume that it's correct        
+}
+
+
+async function assertBranchIsValid(token, organization, repo, branch) {
+    if(branch == "") throw new Error("The branch is empty");
+    try {
+        let res = await axios.get(`https://api.github.com/repos/${organization}/${repo}/branches/${branch}`, getHeaders(token));
+    } catch (e) {
+        if (e.response.status == 404) throw new Error("The branch is invalid. (It could be that the organization/repo is invalid)");
+        if (e.response.status == 401) throw new Error("The token is not authorized");
+        throw new Error("There may be a problem with the token or organization or repo or branch");
+    }
+}
+
+
+async function assertRepoIsValid(token, organization, repo) {
+    if(repo == "") throw new Error ("The repo is empty");
+    try {
+        let res = await axios.get(`https://api.github.com/repos/${organization}/${repo}`, getHeaders(token));
+    } catch (e) {
+        if (e.response.status == 404) throw new Error("The repo is invalid. (It could be that the organization is invalid)");
+        if (e.response.status == 401) throw new Error("The token is not authorized");
+        throw new Error("There may be a problem with the token or organization or repo");
+    }
+}
+
+
+async function assertOrganizationIsValid(token, organization){
+    if (organization == "") throw new Error("The organization is empty");
+    try {
+        let res = await axios.get(`https://api.github.com/orgs/${organization}`, getHeaders(token));
+    } catch (e) {
+        if (e.response.status == 404) throw new Error("The organization is invalid");
+        if (e.response.status == 401) throw new Error("The token is not authorized");
+        throw new Error("There may be a problem with the token or organization");
+    }
+}
+
+async function assertTokenIsValid(token) {
+    if (token == "") throw new Error("The token is empty");
+    try {
+        let res = await axios.get("https://api.github.com/user", getHeaders(token));
+    } catch (e) {
+        if (e.response.status == 401)
+            throw new Error("The token is incorrect");
+        throw new Error("There may be a problem with the token");
     }
 }
 
@@ -187,6 +268,15 @@ function getConfig() {
     };
 }
 
+function getHeaders(token) {
+    return {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github+json',
+        }
+    };
+}
+
 async function valiateToken() {
     try {
         let res = await axios.get("https://api.github.com/user", getConfig());
@@ -196,3 +286,5 @@ async function valiateToken() {
         throw new Error("There may be a problem with the token");
     }
 }
+
+
