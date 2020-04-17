@@ -6,21 +6,23 @@ module.exports = {
         populateToken();
         populateOrganziation();
         console.log("Tokena"+document.getElementById("form-token").value);
-        onInputChangeSync();
+        setRepositoryNames();
     },
     
     onTokenChange: function () {
+        console.log("Token has been changed");
         persistToken();
-        onInputChangeSync()
+        setRepositoryNames().then(x => console.log("Token Change completed successfully")).catch(x => htmlInterface.setError(x.message));
     },
     
     onOrganizationChange: function (){
+        console.log("Repository has been changed");
         persistOrganization();
-        onInputChangeSync();
+        setRepositoryNames().then(x => console.log("Repository Change completed successfully")).catch(x => htmlInterface.setError(x.message));
     },
 
     onInputChangeSyncInterface: function(){
-        onInputChangeSync();
+        setRepositoryNames();
     }
 };
 
@@ -72,28 +74,32 @@ function populateToken() {
       populateToken();
       populateOrganziation();
       console.log("Token"+document.getElementById("form-token").value);
-      onInputChangeSync();
+      onTokenChangeSync();
   }
 
-
-
-function onInputChangeSync() {
-    onInputChange().then(x => console.log("Went well")).catch(x => htmlInterface.setError(x.message));
-}
-
-async function onInputChange(){
+async function setRepositoryNames(){
+    assertBasicInputsAreNotEmpty();
     await valiateToken();
-    
+
     let repositoryNames = await getRepositoryNames();
     htmlInterface.setRepositoryNames(repositoryNames);
-
+    
+    /*s
     let branches = await getBranchNames();
     htmlInterface.setBranchNames(branches);
 
-
     let commitIds = await getCommitIds();
-
     htmlInterface.setCommitIds(commitIds);
+    */
+}
+
+function assertBasicInputsAreNotEmpty() {
+    let token = htmlInterface.getToken();
+    if ((token == null) || (token == ""))
+        throw new Error("The token is empty");
+    let organization = htmlInterface.getOrganization();
+    if ((organization == null) || (organization == ""))
+        throw new Error("The organization is empty");
 }
 
 async function getCommitIds() {

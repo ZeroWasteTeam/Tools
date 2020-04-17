@@ -15,7 +15,9 @@ var htmlInterface = {
     },
 
     getBranch:function () { 
-        return 'release-1234';
+        var x = document.getElementById("form-branch");
+        console.log("The selected branch is "+x.value);
+        return x.value;
     },
 
     getSha:function () { 
@@ -23,27 +25,16 @@ var htmlInterface = {
     },
 
     setError:function (error) {
-        console.log(error);
+        document.getElementById("error").value = error;
     },
 
     setRepositoryNames: function(repositories) {
         console.log(repositories);
+        setSelectOptions("form-repository", repositories);
     },
 
     setBranchNames: function(branches) {
-        var x = document.getElementById("form-branch");
-        var length = x.options.length;
-        for (i = length-1; i >= 0; i--) {
-          x.options[i] = null;
-        }
-
-
-        branches.forEach(branch => {
-            var option = document.createElement("option");
-            option.text = branch;
-            x.add(option, x[0]);
-        });
-        console.log(branches);
+        setSelectOptions("form-branch", branches);
     },
 
     setCommitIds: function(commitIds) {
@@ -53,3 +44,16 @@ var htmlInterface = {
 
 
 module.exports = htmlInterface
+
+function setSelectOptions(id, names) {
+    let x = document.getElementById(id);
+    let length = x.options.length;
+    for (i = length - 1; i >= 0; i--) {
+        x.options[i] = null;
+    }
+    names.forEach(name => {
+        var option = document.createElement("option");
+        option.text = name;
+        x.add(option, x[0]);
+    });
+}
