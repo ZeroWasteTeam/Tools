@@ -12,7 +12,12 @@ module.exports = {
     onTokenChange: function () {
         console.log("Token has been changed");
         persistToken();
-        setRepositoryNames().then(x => console.log("Token Change completed successfully")).catch(x => htmlInterface.setError(x.message));
+        setRepositoryNames()
+            .then(x => console.log("Token Change completed successfully"))
+            .catch(x => {
+                htmlInterface.setError(x.message);
+                console.log(`Token change completed with errors: ${x.message}`);
+            });
     },
     
     onOrganizationChange: function (){
@@ -26,16 +31,8 @@ module.exports = {
     }
 };
 
-function readToken() {
-    return document.getElementById("form-token").value;
-}
-
-function readOrganization() {
-    return document.getElementById("form-organization").value;
-}
-
 function persistToken() {
-    var token = readToken();
+    var token = htmlInterface.getToken();
     let localStorageToken = localStorage.getItem("token");
     if (token == null) token = "";
     if (localStorageToken != token)
@@ -43,7 +40,7 @@ function persistToken() {
 }
 
 function persistOrganization() {
-    var organization = readOrganization();
+    var organization = htmlInterface.getOrganization();
     console.log("organization is "+organization);
     let localStorageOrganization = localStorage.getItem("organization");
     if (organization == null) organization = "";

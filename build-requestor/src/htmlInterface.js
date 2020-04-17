@@ -25,7 +25,7 @@ var htmlInterface = {
     },
 
     setError:function (error) {
-        document.getElementById("error").value = error;
+        document.getElementById("error").innerHTML = error;
     },
 
     setRepositoryNames: function(repositories) {
