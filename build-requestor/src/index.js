@@ -3,6 +3,7 @@ const axios = require('axios');
 
 module.exports = {
     onPageLoad: function () {
+        disableButton();
         console.log("Page loaded started");
         populateToken();
         populateOrganziation();
@@ -15,6 +16,7 @@ module.exports = {
     },
 
     onTokenChange: function () {
+        disableButton();
         console.log("Token has been changed");
         persistToken();
         onBasicInputChangeAsync()
@@ -26,6 +28,7 @@ module.exports = {
     },
 
     onOrganizationChange: function () {
+        disableButton();
         console.log("Organization has been changed");
         persistOrganization();
         onBasicInputChangeAsync()
@@ -37,6 +40,7 @@ module.exports = {
     },
 
     onRepositoryChange: function () {
+        disableButton();
         console.log("Repository has been changed");
         onRepoChangeAsync()
             .then(x => console.log("Repository Change completed successfully"))
@@ -47,6 +51,7 @@ module.exports = {
     },
 
     onBranchChange: function() {
+        disableButton();
         console.log("Branch has been changed");
         onBranchChangeAsync()
             .then(x => console.log("Branch Change completed successfully"))
@@ -54,25 +59,39 @@ module.exports = {
                 console.log("Branch Change completed with errors: " + x.message);
                 htmlInterface.setError(x.message);
             });
-    }
+    },
 
+    onCommitIdChange: function() {
+        disableButton();
+        console.log("CommitId has been changed");
+        onCommitIdChangeAsync()
+            .then(x => console.log("CommitId Change completed successfully"))
+            .catch(x => {
+                console.log("CommitId Change completed with errors: " + x.message);
+                htmlInterface.setError(x.message);
+            });
+    }
 };
 
+function disableButton(){
+    document.getElementById("submit").disabled = true;
+}
+
+function enableButton(){
+    document.getElementById("submit").disabled = false;
+}
+
 async function onBasicInputChangeAsync(){
-    //Disable UI
-    //Disable button
     await clear(repo = true, branch = true, commitId = true);
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization());
     let repositoryNames = await getRepositoryNames();
+    if(repositoryNames.length == 0) throw new Error("There are no repos in this organization");
     htmlInterface.setRepositoryNames(repositoryNames);
     await onRepoChangeAsync();
-    //Enable UI
 }
 
 async function onRepoChangeAsync(){
-    //Disable UI
-    //Disable button
     await clear(repo = false, branch = true, commitId = true);
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository());
@@ -80,19 +99,24 @@ async function onRepoChangeAsync(){
     if(branchNames.length == 0) throw new Error('This repository does not contain any branches');
     htmlInterface.setBranchNames(branchNames);
     await onBranchChangeAsync();
-    //Enable UI
 }
 
 async function onBranchChangeAsync(){
-    //Disable UI
-    //Disable button
+
     await clear(repo = false, branch = false, commitId = true);
     let h = htmlInterface;
     await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository(), h.getBranch());
     let commitIds = await getCommitIds();
+    if(commitIds.length == 0) throw new Error("There are no commits in this branch");
     htmlInterface.setCommitIds(commitIds);
-    //Trigger onChangeRepo
-    //Enable UI
+    await onCommitIdChangeAsync();
+
+}
+
+async function onCommitIdChangeAsync() {
+    let h = htmlInterface;
+    await assertInputsAreCorrect(h.getToken(), h.getOrganization(), h.getRepository(), h.getBranch(), h.getCommitId());
+    enableButton();
 }
 
 
@@ -152,6 +176,7 @@ async function assertInputsAreCorrect(token = null, organization = null, repo = 
 }
 
 async function assertCommitIdIsValid(token, organization, repo, branch, commitId) {
+    if(commitId == "") throw new Error("The commit id is empty");
     //At this point, we would like to assume that it's correct        
 }
 

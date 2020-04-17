@@ -15,7 +15,7 @@ var htmlInterface = {
         return document.getElementById("form-branch").value;
     },
 
-    getSha:function () { 
+    getCommitId:function () { 
         return document.getElementById("form-commitId").value;
     },
 
